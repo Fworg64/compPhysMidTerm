@@ -1,0 +1,686 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.11)  20 FEB 2018 09:44
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**report.tex
+(./report.tex
+LaTeX2e <2016/02/01>
+Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2016/03/03 v2.15a AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks14
+\ex@=\dimen103
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen104
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count87
+LaTeX Info: Redefining \frac on input line 199.
+\uproot@=\count88
+\leftroot@=\count89
+LaTeX Info: Redefining \overline on input line 297.
+\classnum@=\count90
+\DOTSCASE@=\count91
+LaTeX Info: Redefining \ldots on input line 394.
+LaTeX Info: Redefining \dots on input line 397.
+LaTeX Info: Redefining \cdots on input line 518.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 630.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 631.
+\macc@depth=\count92
+\c@MaxMatrixCols=\count93
+\dotsspace@=\muskip10
+\c@parentequation=\count94
+\dspbrk@lvl=\count95
+\tag@help=\toks15
+\row@=\count96
+\column@=\count97
+\maxfields@=\count98
+\andhelp@=\toks16
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks17
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks18
+LaTeX Info: Redefining \[ on input line 2735.
+LaTeX Info: Redefining \] on input line 2736.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks19
+)
+\lst@mode=\count99
+\lst@gtempboxa=\box28
+\lst@token=\toks20
+\lst@length=\count100
+\lst@currlwidth=\dimen112
+\lst@column=\count101
+\lst@pos=\count102
+\lst@lostspace=\dimen113
+\lst@width=\dimen114
+\lst@newlines=\count103
+\lst@lineno=\count104
+\lst@maxwidth=\dimen115
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count105
+\lst@skipnumbers=\count106
+\lst@framebox=\box29
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2015/06/04 1.6 listings configuration
+))
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2016/01/03 v1.0q Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 95.
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count107
+))
+\Gin@req@height=\dimen116
+\Gin@req@width=\dimen117
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2015/08/19 v1.8n multicolumn formatting (FMi)
+\c@tracingmulticols=\count108
+\mult@box=\box30
+\multicol@leftmargin=\dimen118
+\c@unbalance=\count109
+\c@collectmore=\count110
+\doublecol@number=\count111
+\multicoltolerance=\count112
+\multicolpretolerance=\count113
+\full@width=\dimen119
+\page@free=\dimen120
+\premulticols=\dimen121
+\postmulticols=\dimen122
+\multicolsep=\skip46
+\multicolbaselineskip=\skip47
+\partial@page=\box31
+\last@line=\box32
+\maxbalancingoverflow=\dimen123
+\mult@rightbox=\box33
+\mult@grightbox=\box34
+\mult@gfirstbox=\box35
+\mult@firstbox=\box36
+\@tempa=\box37
+\@tempa=\box38
+\@tempa=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\@tempa=\box52
+\@tempa=\box53
+\c@columnbadness=\count114
+\c@finalcolumnbadness=\count115
+\last@try=\dimen124
+\multicolovershoot=\dimen125
+\multicolundershoot=\dimen126
+\mult@nat@firstbox=\box54
+\colbreak@box=\box55
+\mc@col@check@num=\count116
+)
+(/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen127
+\WF@size=\dimen128
+\c@WF@wrappedlines=\count117
+\WF@box=\box56
+\WF@everypar=\toks21
+Package: wrapfig 2003/01/31  v 3.6
+)
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count118
+\Gm@cntv=\count119
+\c@Gm@tempcnt=\count120
+\Gm@bindingoffset=\dimen129
+\Gm@wd@mp=\dimen130
+\Gm@odd@mp=\dimen131
+\Gm@even@mp=\dimen132
+\Gm@layoutwidth=\dimen133
+\Gm@layoutheight=\dimen134
+\Gm@layouthoffset=\dimen135
+\Gm@layoutvoffset=\dimen136
+\Gm@dimlist=\toks22
+) (./report.aux)
+\openout1 = `report.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+\c@lstlisting=\count121
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count122
+\scratchdimen=\dimen137
+\scratchbox=\box57
+\nofMPsegments=\count123
+\nofMParguments=\count124
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count125
+\MPscratchDim=\dimen138
+\MPnumerator=\count126
+\makeMPintoPDFobject=\count127
+\everyMPtoPDFconversion=\toks24
+) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.jpeg,.png,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(72.26999pt, 452.9679pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 700.50687pt, 72.26999pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=452.9679pt
+* \textheight=700.50687pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-37.0pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+<./imgs/axes.png, id=1, 336.25626pt x 152.57pt>
+File: ./imgs/axes.png Graphic file (type png)
+ <use ./imgs/axes.png>
+Package pdftex.def Info: ./imgs/axes.png used on input line 70.
+(pdftex.def)             Requested size: 252.94499pt x 114.76942pt.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+)
+
+Package Listings Warning: Text dropped after begin of listing on input line 142
+.
+
+
+Overfull \hbox (27.03699pt too wide) in paragraph at lines 147--148
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (15.03687pt too wide) in paragraph at lines 148--149
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (27.03699pt too wide) in paragraph at lines 149--150
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Package Listings Warning: Text dropped after begin of listing on input line 157
+.
+
+[2 <./imgs/axes.png>]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 159.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 159.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 160.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 160.
+
+
+Package Listings Warning: Text dropped after begin of listing on input line 172
+.
+
+
+Overfull \hbox (15.03687pt too wide) in paragraph at lines 174--175
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Package Listings Warning: Text dropped after begin of listing on input line 184
+.
+
+
+Package Listings Warning: Text dropped after begin of listing on input line 202
+.
+
+[3]
+
+Package Listings Warning: Text dropped after begin of listing on input line 231
+.
+
+
+Overfull \hbox (21.03693pt too wide) in paragraph at lines 236--237
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.03693pt too wide) in paragraph at lines 238--239
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (57.0373pt too wide) in paragraph at lines 239--240
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+<./imgs/particlesbefore.png, id=29, 430.60875pt x 320.19624pt>
+File: ./imgs/particlesbefore.png Graphic file (type png)
+
+<use ./imgs/particlesbefore.png>
+Package pdftex.def Info: ./imgs/particlesbefore.png used on input line 252.
+(pdftex.def)             Requested size: 216.81pt x 161.22145pt.
+ [4 <./imgs/particlesbefore.png>]
+<./imgs/particlesduring.png, id=34, 433.62pt x 370.38374pt>
+File: ./imgs/particlesduring.png Graphic file (type png)
+
+<use ./imgs/particlesduring.png>
+Package pdftex.def Info: ./imgs/particlesduring.png used on input line 271.
+(pdftex.def)             Requested size: 177.18782pt x 151.34967pt.
+
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+276.
+
+<./imgs/particlesafter.png, id=35, 415.5525pt x 372.39125pt>
+File: ./imgs/particlesafter.png Graphic file (type png)
+
+<use ./imgs/particlesafter.png>
+Package pdftex.def Info: ./imgs/particlesafter.png used on input line 278.
+(pdftex.def)             Requested size: 177.18782pt x 158.7841pt.
+
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+284.
+
+<./imgs/temp16_0.png, id=36, 477.785pt x 489.83pt>
+File: ./imgs/temp16_0.png Graphic file (type png)
+ <use ./imgs/temp16_0.png>
+Package pdftex.def Info: ./imgs/temp16_0.png used on input line 286.
+(pdftex.def)             Requested size: 177.18782pt x 181.65282pt.
+
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+291.
+
+<./imgs/temp8_0.png, id=37, 476.78125pt x 487.8225pt>
+File: ./imgs/temp8_0.png Graphic file (type png)
+ <use ./imgs/temp8_0.png>
+Package pdftex.def Info: ./imgs/temp8_0.png used on input line 293.
+(pdftex.def)             Requested size: 177.18782pt x 181.2954pt.
+
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+298.
+
+<./imgs/temp4_0.png, id=38, 488.82625pt x 481.8pt>
+File: ./imgs/temp4_0.png Graphic file (type png)
+ <use ./imgs/temp4_0.png>
+Package pdftex.def Info: ./imgs/temp4_0.png used on input line 300.
+(pdftex.def)             Requested size: 177.18782pt x 174.63882pt.
+
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+305.
+
+<./imgs/temp2_0.png, id=39, 492.84125pt x 483.8075pt>
+File: ./imgs/temp2_0.png Graphic file (type png)
+ <use ./imgs/temp2_0.png>
+Package pdftex.def Info: ./imgs/temp2_0.png used on input line 307.
+(pdftex.def)             Requested size: 177.18782pt x 173.94171pt.
+
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+312.
+
+<./imgs/temp1_0.png, id=40, 487.8225pt x 481.8pt>
+File: ./imgs/temp1_0.png Graphic file (type png)
+ <use ./imgs/temp1_0.png>
+Package pdftex.def Info: ./imgs/temp1_0.png used on input line 314.
+(pdftex.def)             Requested size: 177.18782pt x 174.99905pt.
+
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+319.
+
+<./imgs/temp_5.png, id=41, 480.79625pt x 480.79625pt>
+File: ./imgs/temp_5.png Graphic file (type png)
+ <use ./imgs/temp_5.png>
+Package pdftex.def Info: ./imgs/temp_5.png used on input line 321.
+(pdftex.def)             Requested size: 177.18782pt x 177.18753pt.
+
+[5 <./imgs/particlesduring.png> <./imgs/particlesafter.png> <./imgs/temp16_0.pn
+g> <./imgs/temp8_0.png> <./imgs/temp4_0.png> <./imgs/temp2_0.png>]
+
+Package wrapfig Warning: Collision between wrapping environments on input line 
+326.
+
+<./imgs/temp_25.png, id=51, 437.635pt x 478.78876pt>
+File: ./imgs/temp_25.png Graphic file (type png)
+ <use ./imgs/temp_25.png>
+Package pdftex.def Info: ./imgs/temp_25.png used on input line 328.
+(pdftex.def)             Requested size: 177.18782pt x 193.84993pt.
+
+<./imgs/temp_125longer.png, id=52, 484.81125pt x 494.84875pt>
+File: ./imgs/temp_125longer.png Graphic file (type png)
+
+<use ./imgs/temp_125longer.png>
+Package pdftex.def Info: ./imgs/temp_125longer.png used on input line 337.
+(pdftex.def)             Requested size: 180.67499pt x 184.4201pt.
+ [6 <./imgs/temp1_0.png> <./imgs/temp_5.png> <./imgs/temp_125longer.png>] [7] [
+8 <./imgs/temp_25.png>] (../src/program.c
+Overfull \hbox (45.03717pt too wide) in paragraph at lines 55--56
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[9
+
+] [10] [11] [12] [13]
+Overfull \hbox (39.03711pt too wide) in paragraph at lines 301--302
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (27.03699pt too wide) in paragraph at lines 302--303
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (39.03711pt too wide) in paragraph at lines 303--305
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (9.0368pt too wide) in paragraph at lines 309--310
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (9.0368pt too wide) in paragraph at lines 310--311
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (9.0368pt too wide) in paragraph at lines 311--312
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[14]
+Overfull \hbox (27.03699pt too wide) in paragraph at lines 353--354
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (33.03705pt too wide) in paragraph at lines 358--359
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (33.03705pt too wide) in paragraph at lines 359--360
+[][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (33.03705pt too wide) in paragraph at lines 360--361
+[][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (39.03711pt too wide) in paragraph at lines 361--363
+[][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (15.03687pt too wide) in paragraph at lines 367--368
+[][][][][][][][][][][][][][][][][] 
+ []
+
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 372.
+
+Overfull \hbox (21.03693pt too wide) in paragraph at lines 375--376
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (3.03674pt too wide) in paragraph at lines 380--381
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (57.0373pt too wide) in paragraph at lines 381--382
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (3.03674pt too wide) in paragraph at lines 382--383
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (57.0373pt too wide) in paragraph at lines 383--384
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[15]
+Overfull \hbox (33.03705pt too wide) in paragraph at lines 431--432
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (33.03705pt too wide) in paragraph at lines 433--434
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (69.03741pt too wide) in paragraph at lines 434--436
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.03693pt too wide) in paragraph at lines 439--440
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.03693pt too wide) in paragraph at lines 440--441
+[][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.03693pt too wide) in paragraph at lines 441--442
+[][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (27.03699pt too wide) in paragraph at lines 442--443
+[][][][][][][][][][][][][][] 
+ []
+
+[16] [17]) [18] (./report.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 4481 strings out of 493029
+ 62719 string characters out of 6136234
+ 198990 words of memory out of 5000000
+ 7937 multiletter control sequences out of 15000+600000
+ 9976 words of font info for 36 fonts, out of 8000000 for 9000
+ 1144 hyphenation exceptions out of 8191
+ 38i,7n,51p,239b,1455s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on report.pdf (18 pages, 302577 bytes).
+PDF statistics:
+ 143 PDF objects out of 1000 (max. 8388607)
+ 84 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+
