@@ -8,21 +8,45 @@ set(GRAPHLIB_HOME "/home/fworg64/lib")
 include_directories("~/include")
 include_directories("/usr/local/lib/gsl/include")
 
-add_executable(programexec src/program.c)
+include_directories(include)
 
-target_link_libraries(programexec 
-  ${GRAPHLIB_HOME}/libgraph.a 
-  m 
-  X11 
-  "/usr/local/lib/gsl/lib/libgsl.so" 
-  "/usr/local/lib/gsl/lib/libgslcblas.so"
-)
+add_library(renderer src/renderer.c)
 
-
-add_executable(gsltest src/gsl_example.c)
-#link_directories("/usr/local/lib/gsl/lib")
-target_link_libraries(gsltest 
-  "/usr/local/lib/gsl/lib/libgsl.so" 
-  "/usr/local/lib/gsl/lib/libgslcblas.so"
+target_link_libraries(renderer
   m
+  "/usr/local/lib/gsl/lib/libgsl.so" 
+  "/usr/local/lib/gsl/lib/libgslcblas.so"
 )
+
+############
+# Build Test programs
+############
+add_executable(raygenTest src/tests/cameraRayGenerationTest.c)
+
+target_link_libraries(raygenTest 
+  renderer
+)
+#############
+#Build main program
+#############
+#add_executable(programexec src/main.c)
+
+#target_link_libraries(programexec 
+#  ${GRAPHLIB_HOME}/libgraph.a 
+#  m 
+#  X11 
+#  renderer
+#)
+
+
+##############
+#example for compiling gsl code
+##############
+#add_executable(gsltest src/gsl_example.c)
+#
+#target_link_libraries(gsltest 
+#  "/usr/local/lib/gsl/lib/libgsl.so" 
+#  "/usr/local/lib/gsl/lib/libgslcblas.so"
+#  m
+#)
+#

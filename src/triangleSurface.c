@@ -12,6 +12,9 @@ double dotProduct(double E1[3], double E2[3]){
 }
 void crossProduct(double a[3], double b[3], double result[3])
 {
+  //find if ray and surface intersect
+  //find point at which intersection takes place
+
   result[0] = a[1]*b[2] - a[2]*b[1];
   result[1] = a[2]*b[0] - a[0]*b[2];
   result[2] = a[0]*b[1] - a[1]*b[0];
@@ -102,3 +105,4 @@ collisionState intersect(triangleSurface *surf, tracingRay *ray, &intersectionRe
 
 
 }
+

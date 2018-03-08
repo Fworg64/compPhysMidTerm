@@ -3,7 +3,7 @@
 
 #include "tracingRay.h"
 
-typedef struct
+typedef struct triangle_S
 {
   double v0[3], v1[3], v2[3]; //vertices of triangle in world coord
   double reflectionIndex; // 0 to 1 on how dispersive(0)/reflective(1) surface is
@@ -13,7 +13,13 @@ typedef struct
 } triangleSurface;
 
 
-bool intersect(triangleSurface *surf, tracingRay *ray, &intersectionResults res);
+typedef enum coll_E
+{
+  INTERSECT,
+  MISS,
+  ABSORBED
+} collisionState;
 
+collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionResults *res);
 
 #endif
