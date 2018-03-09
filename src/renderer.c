@@ -1,6 +1,6 @@
 #include "renderer.h"
 #include <math.h>
-
+#include <gsl/gsl_linalg.h>
 
 
 void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols)
@@ -14,6 +14,11 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
    renderman.trans = gsl_matrix_alloc(4,4);
    renderman.boxpoints = gsl_matrix_alloc(4,8);
    renderman.renderBoxpoints = gsl_matrix_alloc(4,8);
+   gsl_matrix * inverseTransform = gsl_matrix_alloc(4,4);
+   gsl_matrix * originPoint = gsl_matrix_alloc(4,1);
+   gsl_matrix * unitDirectionVector = gsl_matrix_alloc(4,1);
+   gsl_matrix * result = gsl_matrix_alloc(4,1);
+   
    //have camera pose and euler angles, need resolution and size of pixels 
    //and have distance of film from pinhole as zoom
 
@@ -49,7 +54,10 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
                  0, renderman.coordinateTransform);
 
   //calculate inverse of this transorm
-  
+  gsl_permutation * myPerm;
+  int * signum;
+  gsl_linalg_LU_decomp(renderman.coordinateTransform, myPerm, signum);
+  gsl_linalg_LU_invert(renderman.coordinateTransform, myPerm, inverseTransform);
 
   //now have start point in each loop, define each ray 
   //as starting there and having a unit vector pointing towards the point zoom distance away from
@@ -57,10 +65,10 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
   // (so vector from point to centerx,y + normal vector. Then normalized)
 
   //calculate normal point (tip of normal vector) of imaging plane with zoom length
-  // (thats 0,0,cam.zoom)
+  // (thats 0,0,0)
   double normalx = 0;
   double normaly = 0;
-  double normalz = cam.zoom;
+  double normalz = 0;
 
   for (int row=0; row<numRaysRows; row++)
   {
@@ -72,10 +80,35 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
         double filmz = -cam.zoom;
         //take (normal point - film point) and normalize to get unit direction 
         // vector in camera coord
-
-        //apply inverse tf to film point to get origin in world coord
-        //apply inverse tf to unit direction vector to get udv in world coord
+        double magnitude = sqrt(filmy * filmy + filmx * filmx + normalz*normalz);
         
+        double udvU = filmy/magnitude;
+        double udvV = filmx/magnitude;
+        double udvW = cam.zoom/magnitude;
+        //apply inverse tf to film point to get origin in world coord
+        gsl_matrix_set(originPoint, 0,0, filmx);
+        gsl_matrix_set(originPoint,1,0,filmy);
+        gsl_matrix_set(originPoint,2,0,filmz);
+        gsl_matrix_set(originPoint,3,0,1);
+
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, inverseTransform, 
+                       originPoint, 0, result);
+        
+        rays[row + numRaysRows * col].origin[0] = gsl_matrix_get(result, 0,0);
+        rays[row + numRaysRows * col].origin[1] = gsl_matrix_get(result, 1,0);
+        rays[row + numRaysRows * col].origin[2] = gsl_matrix_get(result, 2,0);
+        //apply inverse tf to unit direction vector to get udv in world coord
+        gsl_matrix_set(unitDirectionVector, 0,0, udvU);
+        gsl_matrix_set(unitDirectionVector,1,0,udvV);
+        gsl_matrix_set(unitDirectionVector,2,0,udvW);
+        gsl_matrix_set(unitDirectionVector,3,0,1);
+
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, inverseTransform, 
+                       unitDirectionVector, 0, result);
+
+        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0);
+        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0);
+        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0);
      }
 
   }
@@ -87,6 +120,10 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
   gsl_matrix_free (renderman.trans);
   gsl_matrix_free (renderman.boxpoints);
   gsl_matrix_free (renderman.renderBoxpoints);
+  gsl_matrix_free (inverseTransform);
+  gsl_matrix_free (originPoint);
+  gsl_matrix_free (unitDirectionVector);
+  gsl_matrix_free (result);
   
 }
 
