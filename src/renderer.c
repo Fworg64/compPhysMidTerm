@@ -111,7 +111,7 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
         double filmz = -cam.zoom;
         //take (normal point - film point) and normalize to get unit direction 
         // vector in camera coord
-        double magnitude = sqrt(filmy * filmy + filmx * filmx + normalz*normalz);
+        double magnitude = sqrt(filmy * filmy + filmx * filmx + cam.zoom*cam.zoom);
         
         double udvU = filmy/magnitude;
         double udvV = filmx/magnitude;
@@ -137,9 +137,9 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, inverseTransform, 
                        unitDirectionVector, 0, result);
 
-        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0);
-        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0);
-        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0);
+        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0) - rays[row + numRaysRows * col].origin[0];
+        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0) - rays[row + numRaysRows * col].origin[1];
+        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0) - rays[row + numRaysRows * col].origin[2];
      }
 
   }
