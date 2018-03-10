@@ -1,11 +1,12 @@
 #include "renderer.h"
 #include <math.h>
 #include <gsl/gsl_linalg.h>
+#include <stdio.h>
 
 
 void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols)
 {
-
+   printf("starting routine\n");
    struct renderman_S renderman;
    renderman.camU = gsl_vector_alloc(3);
    renderman.camV = gsl_vector_alloc(3);
@@ -14,6 +15,7 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
    renderman.trans = gsl_matrix_alloc(4,4);
    renderman.boxpoints = gsl_matrix_alloc(4,8);
    renderman.renderBoxpoints = gsl_matrix_alloc(4,8);
+   renderman.coordinateTransform = gsl_matrix_alloc(4,4);
    gsl_matrix * inverseTransform = gsl_matrix_alloc(4,4);
    gsl_matrix * originPoint = gsl_matrix_alloc(4,1);
    gsl_matrix * unitDirectionVector = gsl_matrix_alloc(4,1);
@@ -39,7 +41,8 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
   gsl_blas_drot(renderman.camU, renderman.camV, cos(cam.roll), sin(cam.roll));
   gsl_blas_drot(renderman.camU, renderman.camW, cos(cam.pan), sin(cam.pan));
   gsl_blas_drot(renderman.camV, renderman.camW, cos(cam.tilt), sin(cam.tilt));
-
+  
+  printf("forming transform matrices\n");
   //form rotation and translation matrices
   for (unsigned int i=0; i<3; i++)
   {
@@ -48,22 +51,50 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
     gsl_matrix_set(renderman.rot,   i, 1, gsl_vector_get(renderman.camV, i));
     gsl_matrix_set(renderman.rot,   i, 2, gsl_vector_get(renderman.camW, i));
   }
+  gsl_matrix_set(renderman.rot, 3,3,1);
+  for (unsigned int i=0; i<4; i++)
+       {gsl_matrix_set(renderman.trans, i,i,1);}
+
+  printf("\nrotation matrix: \n");
+  for (unsigned int i=0; i<4; i++)
+  printf("%f, %f, %f, %f,\n", gsl_matrix_get(renderman.rot, i,0),
+                              gsl_matrix_get(renderman.rot, i,1),
+                              gsl_matrix_get(renderman.rot, i,2), 
+                              gsl_matrix_get(renderman.rot, i,3));
+
+  printf("\ntranslation matrix: \n");
+  for (unsigned int i=0; i<4; i++)
+  printf("%f, %f, %f, %f,\n", gsl_matrix_get(renderman.trans, i,0),
+                              gsl_matrix_get(renderman.trans, i,1),
+                              gsl_matrix_get(renderman.trans, i,2), 
+                              gsl_matrix_get(renderman.trans, i,3));
 
   //calculate total transformation matrix
-  gsl_blas_dgemm(CblasNoTrans, CblasNoTrans,  1, renderman.rot, renderman.trans,
+  printf("calculating total tf\n");
+  gsl_blas_dgemm(CblasNoTrans, CblasNoTrans,  1, renderman.trans, renderman.rot,
                  0, renderman.coordinateTransform);
 
-  //calculate inverse of this transorm
-  gsl_permutation * myPerm;
-  int * signum;
-  gsl_linalg_LU_decomp(renderman.coordinateTransform, myPerm, signum);
-  gsl_linalg_LU_invert(renderman.coordinateTransform, myPerm, inverseTransform);
+  printf("\ntransform matrix: \n");
+  for (unsigned int i=0; i<4; i++)
+  printf("%f, %f, %f, %f,\n", gsl_matrix_get(renderman.coordinateTransform, i,0), 
+                              gsl_matrix_get(renderman.coordinateTransform, i,1),
+                              gsl_matrix_get(renderman.coordinateTransform, i,2), 
+                              gsl_matrix_get(renderman.coordinateTransform, i,3));
 
+  //calculate inverse of this transorm
+  printf("calculating inverse\n");
+  gsl_permutation * myPerm =  gsl_permutation_alloc (4);
+  int signum;
+  printf("calculating inverse2\n");
+  gsl_linalg_LU_decomp(renderman.coordinateTransform, myPerm, &signum);
+  printf("calculating inverse3\n");
+  gsl_linalg_LU_invert(renderman.coordinateTransform, myPerm, inverseTransform);
+  gsl_permutation_free(myPerm);
   //now have start point in each loop, define each ray 
   //as starting there and having a unit vector pointing towards the point zoom distance away from
   //the centerx, centery point and normal to the imaging plane
   // (so vector from point to centerx,y + normal vector. Then normalized)
-
+  printf("going to generate rays\n");
   //calculate normal point (tip of normal vector) of imaging plane with zoom length
   // (thats 0,0,0)
   double normalx = 0;
@@ -112,7 +143,8 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
      }
 
   }
-
+  
+  printf("freeing allocated memory");
   gsl_vector_free (renderman.camU);
   gsl_vector_free (renderman.camV);
   gsl_vector_free (renderman.camW);

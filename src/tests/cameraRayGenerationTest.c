@@ -9,13 +9,13 @@
 
 #define LENGTH 50
 
-tracingRay rays[120][120];
+tracingRay rays[120*120];
 
 camera cam;
 
 int main()
 {
-
+  printf("starting test\n");
   cam.pose = gsl_vector_alloc(3);
   gsl_vector_set(cam.pose, 0, -.5*LENGTH);
   gsl_vector_set(cam.pose, 1, .3*LENGTH);
@@ -27,7 +27,7 @@ int main()
   cam.roll =0;
 
 
-
+  printf("going into routine\n");
   generateRaysFromCamera(cam, rays, 120, 120);
   
   for (int row =0; row < RAYROW; row++)
