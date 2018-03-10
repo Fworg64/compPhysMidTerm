@@ -13,6 +13,7 @@ include_directories(include)
 add_library(renderer src/renderer.c)
 
 target_link_libraries(renderer
+  png
   m
   "/usr/local/lib/gsl/lib/libgsl.so" 
   "/usr/local/lib/gsl/lib/libgslcblas.so"
