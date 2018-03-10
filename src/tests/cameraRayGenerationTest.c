@@ -22,8 +22,8 @@ int main()
   gsl_vector_set(cam.pose, 2, .6 * LENGTH);
   
   cam.pan = 0;
-  cam.tilt = .4;
-  cam.zoom = 200;
+  cam.tilt = 0;
+  cam.zoom = .2;
   cam.roll =0;
 
 
@@ -34,7 +34,13 @@ int main()
   {
     for (int col =0; col < RAYCOL; col++)
     {
-      printf("ray: ");
+      printf("ray: origin < %.4f, %.4f, %.4f> direction < %.4f, %.4f, %.4f>\n",
+                                      rays[row + RAYROW*col].origin[0], 
+                                      rays[row + RAYROW*col].origin[1],
+                                      rays[row + RAYROW*col].origin[2],
+                                      rays[row + RAYROW*col].direction[0], 
+                                      rays[row + RAYROW*col].direction[1],
+                                      rays[row + RAYROW*col].direction[2]);
     }
   }
 
