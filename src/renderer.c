@@ -113,14 +113,14 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
         // vector in camera coord
         double magnitude = sqrt(filmy * filmy + filmx * filmx + cam.zoom*cam.zoom);
         
-        double udvU = filmy/magnitude;
-        double udvV = filmx/magnitude;
+        double udvU = -filmy/magnitude;
+        double udvV = -filmx/magnitude;
         double udvW = cam.zoom/magnitude;
         //apply inverse tf to film point to get origin in world coord
         gsl_matrix_set(originPoint, 0,0, filmx);
-        gsl_matrix_set(originPoint,1,0,filmy);
-        gsl_matrix_set(originPoint,2,0,filmz);
-        gsl_matrix_set(originPoint,3,0,1);
+        gsl_matrix_set(originPoint, 1,0, filmy);
+        gsl_matrix_set(originPoint, 2,0, filmz);
+        gsl_matrix_set(originPoint, 3,0, 1);
 
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, inverseTransform, 
                        originPoint, 0, result);
@@ -130,18 +130,20 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
         rays[row + numRaysRows * col].origin[2] = gsl_matrix_get(result, 2,0);
         //apply inverse tf to unit direction vector to get udv in world coord
         gsl_matrix_set(unitDirectionVector, 0,0, udvU);
-        gsl_matrix_set(unitDirectionVector,1,0,udvV);
-        gsl_matrix_set(unitDirectionVector,2,0,udvW);
-        gsl_matrix_set(unitDirectionVector,3,0,1);
+        gsl_matrix_set(unitDirectionVector, 1,0, udvV);
+        gsl_matrix_set(unitDirectionVector, 2,0, udvW);
+        gsl_matrix_set(unitDirectionVector, 3,0, 1);
 
-        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, inverseTransform, 
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, renderman.rot, 
                        unitDirectionVector, 0, result);
 
-        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0) - rays[row + numRaysRows * col].origin[0];
-        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0) - rays[row + numRaysRows * col].origin[1];
-        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0) - rays[row + numRaysRows * col].origin[2];
+        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0);// - rays[row + numRaysRows * col].origin[0];
+        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0);// - rays[row + numRaysRows * col].origin[1];
+        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0);// - rays[row + numRaysRows * col].origin[2];
+        //rays[row + numRaysRows * col].direction[0] = udvU;
+        //rays[row + numRaysRows * col].direction[1] = udvV;
+        //rays[row + numRaysRows * col].direction[2] = udvW;
      }
-
   }
   
   printf("freeing allocated memory");

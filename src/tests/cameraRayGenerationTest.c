@@ -22,7 +22,7 @@ int main()
   gsl_vector_set(cam.pose, 2, .6 * LENGTH);
   
   cam.pan = 0;
-  cam.tilt = 0;
+  cam.tilt = .2;
   cam.zoom = .2;
   cam.roll =0;
 
