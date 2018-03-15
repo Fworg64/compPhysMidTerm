@@ -12,14 +12,6 @@ typedef struct triangle_S
 
 } triangleSurface;
 
-
-typedef enum coll_E
-{
-  INTERSECT,
-  MISS,
-  ABSORBED
-} collisionState;
-
 collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionResults *res);
 
 #endif

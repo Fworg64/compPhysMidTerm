@@ -19,6 +19,14 @@ target_link_libraries(renderer
   "/usr/local/lib/gsl/lib/libgslcblas.so"
 )
 
+add_library(triangleSurface src/triangleSurface.c)
+
+target_link_libraries(triangleSurface
+  m
+  "/usr/local/lib/gsl/lib/libgsl.so" 
+  "/usr/local/lib/gsl/lib/libgslcblas.so"
+)
+
 ############
 # Build Test programs
 ############
@@ -30,14 +38,15 @@ target_link_libraries(raygenTest
 #############
 #Build main program
 #############
-#add_executable(programexec src/main.c)
+add_executable(programexec src/main.c)
 
-#target_link_libraries(programexec 
-#  ${GRAPHLIB_HOME}/libgraph.a 
-#  m 
-#  X11 
-#  renderer
-#)
+target_link_libraries(programexec 
+  ${GRAPHLIB_HOME}/libgraph.a 
+  m 
+  X11 
+  renderer
+  triangleSurface
+)
 
 
 ##############

@@ -16,4 +16,11 @@ typedef struct
 
 } intersectionResults;
 
+typedef enum coll_E
+{
+  INTERSECT,
+  MISS,
+  ABSORBED,
+} collisionState;
+
 #endif
