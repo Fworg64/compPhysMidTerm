@@ -150,7 +150,7 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
      }
   }
   
-  printf("freeing allocated memory");
+  printf("Rays generated, freeing allocated memory\n");
   gsl_vector_free (renderman.camU);
   gsl_vector_free (renderman.camV);
   gsl_vector_free (renderman.camW);

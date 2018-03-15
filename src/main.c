@@ -17,8 +17,8 @@ intersectionResults res[RAYCOL*RAYROW];
 camera cam;
 
 triangleSurface mySurf = {.v0 = {0,0,0},
-                          .v1 = {5,0,0},
-                          .v2 = {0,5,0},
+                          .v1 = {50,0,0},
+                          .v2 = {0,50,0},
                           .reflectionIndex = 0,
                           .lightSource =0,
                           .hue = 0, /*should be red*/
@@ -28,11 +28,11 @@ void init()
 {
   cam.pose = gsl_vector_alloc(3);
   gsl_vector_set(cam.pose, 0, -.5*LENGTH);
-  gsl_vector_set(cam.pose, 1, .3*LENGTH);
+  gsl_vector_set(cam.pose, 1, 0*.3*LENGTH);
   gsl_vector_set(cam.pose, 2, .6 * LENGTH);
   cam.pan = 0;
   cam.tilt = .2;
-  cam.zoom = .2;
+  cam.zoom = 2;
   cam.roll =0;
 }
 
@@ -40,18 +40,20 @@ void init()
 void draw3d(int xdim, int ydim)
 {
   generateRaysFromCamera(cam, rays, RAYROW, RAYCOL);
+  collisionState colState;
   for (int row =0; row<RAYROW; row++)
   {
     for (int col=0; col<RAYCOL; col++)
     {
-      intersect(&mySurf, &(rays[row + RAYROW*col]), &(res[row + RAYROW*col]));
+      colState = intersect(&mySurf, &(rays[row + RAYROW*col]), &(res[row + RAYROW*col]));
+      if (colState == INTERSECT) printf("HIT\n");
     }
   }
 
   //match pixels to resulting array, draw to screen rays which have at least one refelction
   //to show that rays are being generated and the pinhole is working
   
-  //iterate backwords? to rotate rays by 180 to make screen make sense
+  //iterate backwards? to rotate rays by 180 to make screen make sense
 
   for (int r =119; r>=0; r--)
   {
