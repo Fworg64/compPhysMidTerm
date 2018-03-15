@@ -1,47 +1,65 @@
 #include <mygraph.h>
+#include <unistd.h> //sleep
+#include <time.h> //nanosleep
 #include "camera.h"
 #include "renderer.h"
 #include "tracingRay.h"
 #include "triangleSurface.h"
 
-//pinhole projector example
-tracingRay rays[120][120];
-intersectionResults res[120][120];
+#define LENGTH 50
+#define RAYCOL 120
+#define RAYROW 120
 
-camera cam = {.pose = {-20, 0, 10},
-                .pan = 0,
-                .tilt =0,
-                .roll =0,
-                .zoom = 1};
+//pinhole projector example
+tracingRay rays[RAYCOL*RAYROW];
+intersectionResults res[RAYCOL*RAYROW];
+
+camera cam;
 
 triangleSurface mySurf = {.v0 = {0,0,0},
-                          .v1 = {5,0,0},
-                          .v2 = {0,5,0},
+                          .v1 = {50,0,0},
+                          .v2 = {0,50,0},
                           .reflectionIndex = 0,
                           .lightSource =0,
-                          .hue = .5,
+                          .hue = 0, /*should be red*/
                           .sat = .5};
+
+void init()
+{
+  cam.pose = gsl_vector_alloc(3);
+  gsl_vector_set(cam.pose, 0, -.5*LENGTH);
+  gsl_vector_set(cam.pose, 1, 0*.3*LENGTH);
+  gsl_vector_set(cam.pose, 2, .6 * LENGTH);
+  cam.pan = 0;
+  cam.tilt = .2;
+  cam.zoom = 2;
+  cam.roll =0;
+}
 
 
 void draw3d(int xdim, int ydim)
 {
-  generateRaysFromCamera(cam, rays, 120, 120);
-  for (int r =0; r<120; r++)
+  generateRaysFromCamera(cam, rays, RAYROW, RAYCOL);
+  collisionState colState;
+  for (int row =0; row<RAYROW; row++)
   {
-    for (int c=0; c<120; c++)
+    for (int col=0; col<RAYCOL; col++)
     {
-      intersect(&mySurf, &(rays[r][c]), &(res[r][c]);
+      colState = intersect(&mySurf, &(rays[row + RAYROW*col]), &(res[row + RAYROW*col]));
+      if (colState == INTERSECT) printf("HIT\n");
     }
   }
+
   //match pixels to resulting array, draw to screen rays which have at least one refelction
   //to show that rays are being generated and the pinhole is working
   
-  //iterate backwords? to rotate rays by 180 to make screen make sense
+  //iterate backwards? to rotate rays by 180 to make screen make sense
+
   for (int r =119; r>=0; r--)
   {
     for (int c=119; c>=0; c--)
     {
-      if (res[r][c].reflections >0)
+      if (res[r + RAYROW*c].ray.reflections >0)
       {
          int xdraw,ydraw;
          xdraw = ((double)(119 - c) / 119.0) * xdim;
@@ -50,6 +68,12 @@ void draw3d(int xdim, int ydim)
       }
     }
   }
+
+}
+
+void doRender()
+{
+  render(cam, rays, 120, 120, "output.png");
 }
 
 int main()
@@ -60,18 +84,19 @@ int main()
   int done=0;
   int repeat=100;
 
+  init();
+
   AddFreedraw("Particles",&draw3d);
   
   StartMenu("Newton",1);
-  DefineDouble("dt",&dt);
   DefineDouble("zoom", &(cam.zoom));
   DefineDouble("pan", &(cam.pan));
   DefineDouble("tilt", &(cam.tilt));
   DefineDouble("roll", &(cam.roll));
 
-  DefineDouble("camX", cam.pose[0]);
-  DefineDouble("camY", cam.pose[1]);
-  DefineDouble("camZ", cam.pose[2]);
+  DefineDouble("camX", gsl_vector_ptr(cam.pose, 0));
+  DefineDouble("camY", gsl_vector_ptr(cam.pose, 1));
+  DefineDouble("camZ", gsl_vector_ptr(cam.pose, 2));
   DefineFunction("do Render", &doRender);
 
   DefineGraph(freedraw_,"graph2");

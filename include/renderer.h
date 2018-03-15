@@ -22,6 +22,6 @@ struct renderman_S
 
 
 void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols);
-void render(camera cam, triangleSurface * surfs, unsigned int numSurfs, const char* filename);
+void render(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols, const char* filename);
 
 #endif

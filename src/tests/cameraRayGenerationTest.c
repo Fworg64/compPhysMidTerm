@@ -44,6 +44,6 @@ int main()
     }
   }
 
-  render(cam, NULL, 20, "image.png");
+  render(cam, rays,120, 120, "image.png");
 
 }

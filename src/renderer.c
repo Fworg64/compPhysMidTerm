@@ -150,7 +150,7 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
      }
   }
   
-  printf("freeing allocated memory");
+  printf("Rays generated, freeing allocated memory\n");
   gsl_vector_free (renderman.camU);
   gsl_vector_free (renderman.camV);
   gsl_vector_free (renderman.camW);
@@ -295,25 +295,92 @@ static int pix (int value, int max)
     }
     return (int) (256.0 *((double) (value)/(double) max));
 }
+//end of code from https://www.lemoda.net/c/write-png/
 
-//render is ours again
-void render(camera cam, triangleSurface * surfs, unsigned int numSurfs, const char* filename)
+//following code taken from programmingalgorithms.com
+struct RGB
+{
+	unsigned char R;
+	unsigned char G;
+	unsigned char B;
+};
+
+struct HSL
+{
+	int H;
+	float S;
+	float L;
+};
+
+float HueToRGB(float v1, float v2, float vH)
+{
+	if (vH < 0)
+		vH += 1;
+
+	if (vH > 1)
+		vH -= 1;
+
+	if ((6 * vH) < 1)
+		return (v1 + (v2 - v1) * 6 * vH);
+
+	if ((2 * vH) < 1)
+		return v2;
+
+	if ((3 * vH) < 2)
+		return (v1 + (v2 - v1) * ((2.0f / 3) - vH) * 6);
+
+	return v1;
+}
+
+struct RGB HSLToRGB(struct HSL hsl) {
+	struct RGB rgb;
+
+	if (hsl.S == 0)
+	{
+		rgb.R = rgb.G = rgb.B = (unsigned char)(hsl.L * 255);
+	}
+	else
+	{
+		float v1, v2;
+		float hue = (float)hsl.H / 360;
+
+		v2 = (hsl.L < 0.5) ? (hsl.L * (1 + hsl.S)) : ((hsl.L + hsl.S) - (hsl.L * hsl.S));
+		v1 = 2 * hsl.L - v2;
+
+		rgb.R = (unsigned char)(255 * HueToRGB(v1, v2, hue + (1.0f / 3)));
+		rgb.G = (unsigned char)(255 * HueToRGB(v1, v2, hue));
+		rgb.B = (unsigned char)(255 * HueToRGB(v1, v2, hue - (1.0f / 3)));
+	}
+
+	return rgb;
+}
+//end of code from programmingalgorithms.com
+
+//render is ours again, it uses the above borrowed code
+void render(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols, const char* filename)
 {
   bitmap_t image;
   int x;
   int y;
 
-  image.width = 100;
-  image.height = 100;
-
+  image.width = numRaysRows;
+  image.height = numRaysCols;
+  //for now, each ray is a pixel
+  struct HSL data;
+  struct RGB values;
   image.pixels = calloc(image.width * image.height, sizeof(pixel_t));
   for (y=0; y <image.height; y++)
   {
      for (x=0; x<image.width; x++)
      {
        pixel_t * pix = pixel_at(&image, x, y);
-       pix->red = y*2;
-       pix->green = x*2;
+       data.H =  rays[y + numRaysRows * x].hue;
+       data.S = rays[y + numRaysRows * x].sat;
+       data.L = rays[y + numRaysRows * x].lightness;
+       values = HSLToRGB(data);
+       pix->red = values.R;
+       pix->green = values.G;
+       pix->blue = values.B;
      } 
   }
 
