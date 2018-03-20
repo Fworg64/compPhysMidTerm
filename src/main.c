@@ -17,9 +17,25 @@ intersectionResults res[RAYCOL*RAYROW];
 
 camera cam;
 
-triangleSurface mySurf = {.v0 = {15,0,-50},
+triangleSurface mySurf = {.v0 = {05,0,-30},
                           .v1 = {30,0,-50},
-                          .v2 = {10,20,-50},
+                          .v2 = {10,30,-40},
+                          .reflectionIndex = 0,
+                          .lightSource =0,
+                          .hue = 0, /*should be red*/
+                          .sat = .5};
+
+triangleSurface myAntiSurf = {.v0 = {10,30,-40},
+                          .v1 = {30,0,-50},
+                          .v2 = {05,0,-30},
+                          .reflectionIndex = 0,
+                          .lightSource =0,
+                          .hue = 0, /*should be red*/
+                          .sat = .5};
+
+triangleSurface ground = {.v0 = {-50,0,0},
+                          .v1 = {500,-500,0},
+                          .v2 = {500,500,0},
                           .reflectionIndex = 0,
                           .lightSource =0,
                           .hue = 0, /*should be red*/
@@ -28,12 +44,12 @@ triangleSurface mySurf = {.v0 = {15,0,-50},
 void init()
 {
   cam.pose = gsl_vector_alloc(3);
-  gsl_vector_set(cam.pose, 0, -.5*LENGTH);
-  gsl_vector_set(cam.pose, 1, 0*.3*LENGTH);
-  gsl_vector_set(cam.pose, 2, .6 * LENGTH);
-  cam.pan = 0;
-  cam.tilt = .2;
-  cam.zoom = 2;
+  gsl_vector_set(cam.pose, 0, -50);
+  gsl_vector_set(cam.pose, 1, 20);
+  gsl_vector_set(cam.pose, 2, 40);
+  cam.pan = -.5;
+  cam.tilt = 0;
+  cam.zoom = .125;
   cam.roll =0;
 }
 
@@ -58,18 +74,51 @@ void draw3d(int xdim, int ydim)
          }
         res[row + RAYROW*col].ray.reflections =0;
 
-         //memcpy(&(rays[row + RAYROW*col]), &(res[row + RAYROW*col].ray), sizeof(tracingRay));
-        if (res[row + RAYROW*col].ray.direction[0] < 0)
-         { 
-           res[row + RAYROW*col].ray.hue = 120;
-         }
-         else 
-         {
+        //bounce the ray off of the ground
+        intersectionResults tempRes;
+        colState = intersect(&ground, &(res[row + RAYROW*col].ray), &tempRes);
+        if (colState == INTERSECT) //missed the triangle, hit the ground
+        {
+           //memcpy(&(res[row + RAYROW*col]), &tempRes, sizeof(tempRes));
+           for (int i=0; i<3;i++)
+           {
+             res[row + RAYROW*col].ray.origin[i] = tempRes.ray.origin[i];
+             res[row + RAYROW*col].ray.direction[i] =  tempRes.ray.direction[i];
+           }
+           res[row + RAYROW*col].ray.reflections =1;
+           //check to see if it would hit the triangle after the ground
+           colState = intersect(&myAntiSurf, &(res[row + RAYROW*col].ray), &tempRes);
+           if (colState == INTERSECT) //this is a shadow
+           {
+             res[row + RAYROW*col].ray.hue = 120;
+             res[row + RAYROW*col].ray.sat = .2;
+             res[row + RAYROW*col].ray.lightness = .2;
+             res[row + RAYROW*col].ray.reflections =2;
+             printf("sha!!!");
+           }
+           else //this is just the ground
+           {
+             res[row + RAYROW*col].ray.hue = 120;
+             res[row + RAYROW*col].ray.sat = .5;
+             res[row + RAYROW*col].ray.lightness = .5;
+             res[row + RAYROW*col].ray.reflections =0;
+             printf("g ");
+           }
+        }
+        else //must have hit the sky
+        {
            res[row + RAYROW*col].ray.hue = 240;
-         }
+           res[row + RAYROW*col].ray.sat = .5;
+           res[row + RAYROW*col].ray.lightness = .5;
+           res[row + RAYROW*col].ray.reflections =0;
+           printf("u ");
+        }
       }
+      else              printf("t ");
+      //else if it intersected, color should have been set in intersect
     }
   }
+  printf("\n ");
 
   //match pixels to resulting array, draw to screen rays which have at least one refelction
   //to show that rays are being generated and the pinhole is working
@@ -81,7 +130,14 @@ void draw3d(int xdim, int ydim)
   {
     for (int c=119; c>=0; c--)
     {
-      if (res[r + RAYROW*c].ray.reflections >0)
+      if (res[r + RAYROW*c].ray.reflections ==2)
+      {
+         int xdraw,ydraw;
+         xdraw = ((double)(119 - c) / 119.0) * xdim;
+         ydraw = ((double)(119 - r) / 119.0) * ydim;
+         myfilledcircle(5, xdraw, ydraw, 10);
+      }
+      if (res[r + RAYROW*c].ray.reflections ==1)
       {
          int xdraw,ydraw;
          xdraw = ((double)(119 - c) / 119.0) * xdim;
