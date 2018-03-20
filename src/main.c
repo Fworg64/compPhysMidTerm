@@ -1,6 +1,7 @@
 #include <mygraph.h>
 #include <unistd.h> //sleep
 #include <time.h> //nanosleep
+#include <string.h> //memcpy
 #include "camera.h"
 #include "renderer.h"
 #include "tracingRay.h"
@@ -31,7 +32,7 @@ void init()
   gsl_vector_set(cam.pose, 1, 0*.3*LENGTH);
   gsl_vector_set(cam.pose, 2, .6 * LENGTH);
   cam.pan = 0;
-  cam.tilt = .42;
+  cam.tilt = .2;
   cam.zoom = 2;
   cam.roll =0;
 }
@@ -46,7 +47,27 @@ void draw3d(int xdim, int ydim)
     for (int col=0; col<RAYCOL; col++)
     {
       colState = intersect(&mySurf, &(rays[row + RAYROW*col]), &(res[row + RAYROW*col]));
-      if (colState == INTERSECT) printf("HIT\n");
+      //if (colState == INTERSECT) printf("HIT\n");
+      if (colState == MISS) 
+      {
+        // printf("MISS\n");
+         for (int i=0; i<3;i++)
+         {
+           res[row + RAYROW*col].ray.origin[i] = rays[row + RAYROW*col].origin[i];
+           res[row + RAYROW*col].ray.direction[i] = rays[row + RAYROW*col].direction[i];
+         }
+        res[row + RAYROW*col].ray.reflections =0;
+
+         //memcpy(&(rays[row + RAYROW*col]), &(res[row + RAYROW*col].ray), sizeof(tracingRay));
+        if (res[row + RAYROW*col].ray.direction[0] < 0)
+         { 
+           res[row + RAYROW*col].ray.hue = 120;
+         }
+         else 
+         {
+           res[row + RAYROW*col].ray.hue = 240;
+         }
+      }
     }
   }
 
@@ -54,6 +75,7 @@ void draw3d(int xdim, int ydim)
   //to show that rays are being generated and the pinhole is working
   
   //iterate backwards? to rotate rays by 180 to make screen make sense
+
 
   for (int r =119; r>=0; r--)
   {
@@ -65,6 +87,20 @@ void draw3d(int xdim, int ydim)
          xdraw = ((double)(119 - c) / 119.0) * xdim;
          ydraw = ((double)(119 - r) / 119.0) * ydim;
          myfilledcircle(4, xdraw, ydraw, 2);
+      }
+      else
+      {
+         int xdraw,ydraw;
+         xdraw = ((double)(119 - c) / 119.0) * xdim;
+         ydraw = ((double)(119 - r) / 119.0) * ydim;
+         if (res[r + RAYROW*c].ray.direction[0] >0)
+         {
+           myfilledcircle(3, xdraw, ydraw, 2);
+         }
+         else
+         {
+           myfilledcircle(2, xdraw, ydraw, 2);
+         }
       }
     }
   }
