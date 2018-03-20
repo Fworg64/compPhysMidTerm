@@ -2,4 +2,4 @@ build
 report/*.pdf
 report/*.log
 report/*.aux
-
+CMakeLists.txt
