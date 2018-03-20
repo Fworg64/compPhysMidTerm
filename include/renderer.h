@@ -21,7 +21,7 @@ struct renderman_S
 };
 
 
-void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols);
-void render(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols, const char* filename);
+void generateRaysFromCamera(camera cam, tracingRay * rays , unsigned int numRaysRows, unsigned int numRaysCols);
+void render(camera cam,intersectionResults * theres, unsigned int numRaysRows, unsigned int numRaysCols, const char* filename);
 
 #endif
