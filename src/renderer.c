@@ -357,7 +357,7 @@ struct RGB HSLToRGB(struct HSL hsl) {
 //end of code from programmingalgorithms.com
 
 //render is ours again, it uses the above borrowed code
-void render(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned int numRaysCols, const char* filename)
+void render(camera cam, intersectionResults * theres, unsigned int numRaysRows, unsigned int numRaysCols, const char* filename)
 {
   bitmap_t image;
   int x;
@@ -374,9 +374,9 @@ void render(camera cam, tracingRay * rays, unsigned int numRaysRows, unsigned in
      for (x=0; x<image.width; x++)
      {
        pixel_t * pix = pixel_at(&image, x, y);
-       data.H =  rays[y + numRaysRows * x].hue;
-       data.S = rays[y + numRaysRows * x].sat;
-       data.L = rays[y + numRaysRows * x].lightness;
+       data.H =  theres[y + numRaysRows * x].ray.hue;
+       data.S = theres[y + numRaysRows * x].ray.sat;
+       data.L = theres[y + numRaysRows * x].ray.lightness;
        values = HSLToRGB(data);
        pix->red = values.R;
        pix->green = values.G;

@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8.1)
 project(PROGRAM)
 set(CMAKE_BUILD_TYPE Debug)
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror")
 set(GRAPHLIB_HOME "/home/fworg64/lib")
 #set(GSL_LIBS "/usr/local/lib/gsl/lib/libgsl.so /usr/local/lib/gsl/lib/libgslcblas.so m")
 
