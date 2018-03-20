@@ -73,7 +73,7 @@ void draw3d(int xdim, int ydim)
 
 void doRender()
 {
-  render(cam, rays, 120, 120, "output.png");
+  render(cam, res, 120, 120, "output.png");
 }
 
 int main()
