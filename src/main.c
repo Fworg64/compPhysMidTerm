@@ -16,9 +16,9 @@ intersectionResults res[RAYCOL*RAYROW];
 
 camera cam;
 
-triangleSurface mySurf = {.v0 = {0,0,0},
-                          .v1 = {50,0,0},
-                          .v2 = {0,50,0},
+triangleSurface mySurf = {.v0 = {15,0,-50},
+                          .v1 = {30,0,-50},
+                          .v2 = {10,20,-50},
                           .reflectionIndex = 0,
                           .lightSource =0,
                           .hue = 0, /*should be red*/
@@ -31,7 +31,7 @@ void init()
   gsl_vector_set(cam.pose, 1, 0*.3*LENGTH);
   gsl_vector_set(cam.pose, 2, .6 * LENGTH);
   cam.pan = 0;
-  cam.tilt = .2;
+  cam.tilt = .42;
   cam.zoom = 2;
   cam.roll =0;
 }

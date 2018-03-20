@@ -4,13 +4,13 @@
 #include <gsl/gsl_rng.h>
 
 double dotProduct(double E1[3], double E2[3]){
-  double result;
+  double result=0;
   for (int i=0; i<3; i++){
     result +=E1[i]*E2[i];
   }
   return result;
 }
-void crossProduct(double a[3], double b[3], double result[3])
+void crossProduct(double a[3], double b[3], double * result)
 {
   //find if ray and surface intersect
   //find point at which intersection takes place
@@ -28,12 +28,14 @@ collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionRes
   double N[3];
   double t;
   double p0l0[3];
+  //printf("Print from function \n");
   for(int i=0; i<3; i++){
     edge0[i]=(surf->v0[i])-(surf->v1[i]);
     edge1[i]=(surf->v1[i])-(surf->v2[i]);
     edge2[i]=(surf->v2[i])-(surf->v0[i]);
   }
   crossProduct(edge0,edge1,N);
+  //printf("N %.4f, %.4f, %.4f\n",N[0],N[1],N[2]);
   double denom = dotProduct(N, ray->direction);
   if (denom > 1e-6){
     double numer[3];
@@ -41,36 +43,44 @@ collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionRes
       p0l0[i]=surf->v0[i] - ray->origin[i];
     }
     t = dotProduct(p0l0,N)/denom;
+    //printf("t1 %4.f\n",t);
   }
   else{
+    //printf("MISS1");
     return MISS;
   }
   double D = dotProduct(N,surf->v0);
+  // printf("D %4.f\n",D);
   t=(dotProduct(N, ray->origin)+D)/(dotProduct(N,ray->direction));
+  //printf("t2 %4.f\n",t);
   double P[3],C[3],vp0[3],vp1[3],vp2[3];
   //check edge0
   for (int i=0; i<3;i++){
     P[i] = ray->origin[i]+(t*ray->direction[i]);
     vp0[i]=(P[i] - surf->v0[i]);
   }
-  crossProduct(edge0,vp0,C);
+  crossProduct(vp0,edge0,C);
+  //printf("C %.4f, %.4f, %.4f\n",C[0],C[1],C[2]);
   if (dotProduct(N,C)<0){
+    //printf("MISS2\n");
     return MISS;
   }
   //check edge1
   for (int i=0; i<3;i++){
     vp1[i]=(P[i]-surf->v1[i]);
   }
-  crossProduct(edge1,vp1,C);
+  crossProduct(vp1,edge1,C);
   if (dotProduct(N,C)<0){
+    //printf("MISS3\n");
     return MISS;
   }
   //check edge2
   for (int i=0; i<3;i++){
     vp2[i]=(P[i]-surf->v2[i]);
   }
-  crossProduct(edge2,vp2,C);
+  crossProduct(vp2,edge2,C);
   if (dotProduct(N,C)<0){
+    //printf("MISS4\n");
     return MISS;
   }
   res->dist = (P[0])*(P[0])+(P[1])*(P[1])+(P[2])*(P[2]);
@@ -83,7 +93,7 @@ collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionRes
     return ABSORBED;
   }
   else { //perfect reflection
-      double DP,MagN,MagDir;
+      double DP,MagN,MagD;
     DP = dotProduct(ray->direction,N);
     for (int i=0;i<3;i++){
       MagN+=N[i]*N[i];
@@ -93,7 +103,12 @@ collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionRes
       N[i]/=MagN;
     }
     for(int i=0;i<3;i++){
-      res->ray.direction[i]=ray->direction[i]-2*(DP)*N[i];
+      res->ray.direction[i]=(ray->direction[i]-2*(DP)*N[i]);
+      MagD+=res->ray.direction[i]*res->ray.direction[i];
+    }
+    MagD=sqrt(MagD);
+    for (int i=0; i<3; i++){
+      res->ray.direction[i]/=MagD;
     }
     for (int i=0;i<3;i++){
       res->ray.origin[i]=P[i];
@@ -103,7 +118,7 @@ collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionRes
   //change hue and saturation if first intersection with surface? average across intersections
   //with materials?
 
-  if (res->ray.reflections ==1)
+  if (ray->reflections==0)
   {
     res->ray.hue = surf->hue;
     res->ray.sat = .5;
