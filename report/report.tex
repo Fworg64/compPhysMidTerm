@@ -40,7 +40,7 @@ from rendering techniques previously explored in the class.
 \section{Introduction}
 %\IEEEPARstart{T}{his}
 This midterm assignement required students to design and develop a simulation of a physical phenomenon 
-of their choosing. Our group chose to explore ray-tracing because we felt it aligned closely with the 
+of their choosing. Our group chose to explore ray-tracing because we felt it aligned fairly closely with the 
 material presented in class thus far and also presented a complex enough subject to warrent exploration.
 The system implemented shows a triangular section casting a shadow onto a ground plane from light sources
 present above the triangular surface (above meaning in the +Z direction of the world's coordinates).
@@ -93,23 +93,178 @@ lots of coordinates and stuff
 %describe the camera coordinate systema and the transform between it and the world coordinate system. 
 %describe that the rays origin points are just the center of each pixel on the imageing plane
 %so the rays are just the rays which start at that point and point towards the pinhole
-
-\section{Ray interaction with World}
+\section{Plane Generation}
 \subsection{Description}
-making sure the rays bounce off of stuff
-
+The second step in the process of creating an accurate simulation is to create a way to model the triangular planes
+that will allow for interaction with the rays in the world. Each triangular plane is described using three vertices
+which outline the section of a given plane that is inside the given triangle. Each plane also needed several properties
+outlining the color and material of the given plane.
 \subsection{Implementation}
+\begin{lstlisting}[language = C]
+  typedef struct triangle_S
+  {
+    double v0[3], v1[3], v2[3]; //vertices of triangle in world coord
+    double reflectionIndex; // 0 to 1 on how dispersive(0)/reflective(1) surface is
+    double lightSource; //how much light the surface produces (0 to 1)
+    double hue, sat; //hue and sat are from material
+    
+  } triangleSurface;
+\end{lstlisting}
+We utilized a structure format in order to easily make and keep track of our surface code, which is outlined above.
+v0, v1, and v2 are the vertices of the triangle in our coordinate system, reflectionIndex describes how reflective
+a given triangular surface is, lightscore describes how much light a given triangular section gives off, making
+it useful for creating light sources, and the hue and saturation, which control how bright and vibrant the colors of
+the reflected light are. The structure format  allowed us to include this code in our other code sections, which
+allowed us to use these structures to store all the data we needed to generate a triangular plane in all of our
+other files.
+\section{Ray interaction with World}
+The second step in the process of creating an accurate simulation is to allow the rays to interact with
+the world, specifically, the triangular planar sections that we generated using the triangular structure
+code that we created in a structure (the code for which we included at the beginning of the file). The first
+issue we needed to tackle was figuring out whether the given ray intersected the given plane at all.
+\begin{lstlisting}[language=C]
+  double dotProduct(double E1[3], double E2[3]){
+    double result=0;
+    for (int i=0; i<3; i++){
+      result +=E1[i]*E2[i];
+    }
+    return result;
+  }
+  void crossProduct(double a[3], double b[3], double * result)
+  {
+    
+    result[0] = a[1]*b[2] - a[2]*b[1];
+    result[1] = a[2]*b[0] - a[0]*b[2];
+    result[2] = a[0]*b[1] - a[1]*b[0];
+  }
+\end{lstlisting}
+The very first thing we did was to create functions for our cross products and our dot products, as both were
+mathematical tools that we would need to use multiple times throughout the process of both determining whether
+or not the particle hit the plane, but also to how the particle reflected off of the plane. In order to take the dot
+product, we multiplied the corresponding members of two vectors (in our code represented by arrays), and added them all
+together, which corresponds to taking the dot product of two vectors manually. The cross products were a bit tougher, but
+we utilized the standard method for taking a 3 by 3 determinant (and thereby taking the cross product) to get each member
+of the array, and each element of the resultant vector.
+\begin{lstlisting}[language=C]
+  for(int i=0; i<3; i++){
+    edge0[i]=(surf->v0[i])-(surf->v1[i]);
+    edge1[i]=(surf->v1[i])-(surf->v2[i]);
+    edge2[i]=(surf->v2[i])-(surf->v0[i]);
+  }
+  crossProduct(edge0,edge1,N);
+\end{lstlisting}
+We started the process of calculating the intersection of the ray and the planes  by outlining the edge lengths of
+the space, and taking the cross productof two of the edges to get the normal vector of the plane. We do this, as both
+the normal vector and the edges will be useful later for describing the plane's direction.
+\begin{lstlisting}[language=C]
+  double denom = dotProduct(N, ray->direction);
+  if (denom > 1e-6){
+    double numer[3];
+    for (int i=0;i<3;i++){
+      p0l0[i]=surf->v0[i] - ray->origin[i];
+    }
+    t = dotProduct(p0l0,N)/denom;
+  }
+  else{
+    return MISS;
+  }
+\end{lstlisting}
+\begin{equation}
+  \hat{A}\dot\hat{B}=|\hat{A}||\hat{B}|cos(\Theta)
+  \label{DPE}
+\end{equation}
+In this next section of the code, we make use of the normal vector that we found earlier in order to calculate the
+dot product between the direction vector of the ray and the normal. This is essentially calculating how paralell the
+two vectors are along with multiplying their magnitudes, as though the way we do this in our code is by multiplying and
+adding the elements of the two vectors which we wish to manipulate, another way to describe a cross product is given in
+equation (\ref{DPE}). After this, we check to see that this value is not very small, as if it were, that would mean that
+the plane and the ray are perpandicular, or so very nearly perpandicular that for our purposes the effect would be the same.
+If they were perpandicular, the function would end up dividing by zero, and this would crash the program, also, if they were
+perpandicular, the ray would miss the plane either way. Knowing this, we know that the ray will intersect with the plane that
+contains the triangular section at some point, though we do not yet know whether it intersects with the triangle itself. We then,
+if the dennominator (cross product) was not zero, calculated the distance between each point of a vertex on the serfice and the
+ray origin (identified here as p0l0), and then calculated t, which is the scaling factor between the starting direction vector's
+magnitude, and the magnitude of the direction vector of the actual distance between the ray's origin and the plane in the direction
+of the ray.
+\begin{lstlisting}[language = C]
+  //check edge0
+  for (int i=0; i<3;i++){
+    P[i] = ray->origin[i]+(t*ray->direction[i]);
+    vp0[i]=(P[i] - surf->v0[i]);
+  }
+  crossProduct(vp0,edge0,C);
+  if (dotProduct(N,C)<0){
+    return MISS;
+  }
+  //check edge1
+  for (int i=0; i<3;i++){
+    vp1[i]=(P[i]-surf->v1[i]);
+  }
+  crossProduct(vp1,edge1,C);
+  if (dotProduct(N,C)<0){
+    return MISS;
+  }
+  //check edge2
+  for (int i=0; i<3;i++){
+    vp2[i]=(P[i]-surf->v2[i]);
+  }
+  crossProduct(vp2,edge2,C);
+  if (dotProduct(N,C)<0){
+    return MISS;
+  }
+\end{lstlisting}
+The last step in checking whether the ray intersects with the triangular section of the plane, after we have determined that the
+ray does indeed intersect with the plane, is to check and see whether the ray intersects with the triangular section. To do this,
+we make three checks. In the first part of our code, we check edge0, and define what point P is. Point P is defined as the point at
+which the ray actually intersects with the triangular plane, and is found by adding the origin of the ray to t multiplied by the ray's
+direction. This allows us to have a reference on the plane to use in comparison to the edge of the plane.  To check if the point lies
+on the correct side of edge0, we calculate C, which is the cross product between vp0 and edge0. If vp0 cross edge0 cross the normal
+vector of the plane is not less than zero, we know that the point is contained within that edge. Thus, as we repeat the process for
+edge1 and edge2, if the point is also contained within both of those edges, then it must be contained within the triangle.
+\begin{lstlisting}
+  double DP,MagN,MagD;
+  DP = dotProduct(ray->direction,N);
+  for (int i=0;i<3;i++){
+    MagN+=N[i]*N[i];
+  }
+  MagN=sqrt(MagN);
+  for (int i =0; i<3; i++){
+    N[i]/=MagN;
+  }
+  for(int i=0;i<3;i++){
+    res->ray.direction[i]=(ray->direction[i]-2*(DP)*N[i]);
+    MagD+=res->ray.direction[i]*res->ray.direction[i];
+  }
+  MagD=sqrt(MagD);
+  for (int i=0; i<3; i++){
+    res->ray.direction[i]/=MagD;
+  }
+  for (int i=0;i<3;i++){
+    res->ray.origin[i]=P[i];
+  }
+  res->ray.reflections=ray->reflections+1;
+\end{lstlisting}
+The last element needed for accurate ray interactions was for the rays to be able to reflect off of the planar sections. However, in order
+to do this, we needed to first know that the ray would actually intersect with the triangle. We, therefore, placed this into the same function
+as the intersection algorithm discussed previously, and thus it is one of the last parts of that function, only occurring if the ray actually
+intersects with the triangle. The first part of this function is dedicated to finding the dot product between the ray's direction and the
+normal vector of the plane, along with finding the magnitude of the normal vector. We then normalize the normal vector using its magnitude,
+and make it into a unit vector. We then find the direction of the resulting ray, by taking the original direction, and subtracting 2 times the
+dot product that was calculated earlier between the normal vector of the plane and the original direction times the coodrinates of the normal vector.
+This makes a vector that represents the new direction of the ray after reflection. We then find the magnitude of this reflected direction vector,
+and divide the reflected direction vector's elements by the magnitude, making it a unit vector. Finally, we set the orgin of the reflected ray to be
+the point at which the original ray intersects with the triangular plane, and we increment the number of reflections that the ray has made.
+\section{Results}
 
-description of math
+\section{Personal Contribution}
 
 \section{Conclusion}
-Obviously there are approximations which take place in a simulation. The question a simulator must ask is how
-much approximation is acceptable and how much error can be allowed. The data from these experiments show that this
-module should most likely not be used for low temperature collisions of groups of gas particles. However, at higher
-temperatures the resuslts could be acceptable depending on application.
-
-Additionally, the 3D rendering system outlined in this report is very modular and could be extended easily to 
-do things like having the camera follow a path or track certain elements throughout the simulation.
+In this project, we have created a method with which to model light rays reflecting off of a surface, including shadows. We also
+included the potential for different colors and shades, based on what you want the material to reflect. We have included the capability
+for a sky and ground, based on the way which the rays that did not reflect off of anything, sky being angled upwards, and ground
+being angled down. Additionally, the 3D rendering system outlined in this report is very modular and could be extended easily to
+do things like having the camera follow a path or track certain elements throughout the simulation, allowing for full 360 degree
+view of the field.
 
 The code used to complete this assignment is attached as an appendix to this document.
 
