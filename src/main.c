@@ -63,7 +63,6 @@ void draw3d(int xdim, int ydim)
     for (int col=0; col<RAYCOL; col++)
     {
       colState = intersect(&mySurf, &(rays[row + RAYROW*col]), &(res[row + RAYROW*col]));
-      //if (colState == INTERSECT) printf("HIT\n");
       if (colState == MISS) 
       {
         // printf("MISS\n");
@@ -94,7 +93,6 @@ void draw3d(int xdim, int ydim)
              res[row + RAYROW*col].ray.sat = .2;
              res[row + RAYROW*col].ray.lightness = .2;
              res[row + RAYROW*col].ray.reflections =2;
-             printf("sha!!!");
            }
            else //this is just the ground
            {
@@ -102,7 +100,6 @@ void draw3d(int xdim, int ydim)
              res[row + RAYROW*col].ray.sat = .5;
              res[row + RAYROW*col].ray.lightness = .5;
              res[row + RAYROW*col].ray.reflections =0;
-             printf("g ");
            }
         }
         else //must have hit the sky
@@ -111,15 +108,12 @@ void draw3d(int xdim, int ydim)
            res[row + RAYROW*col].ray.sat = .5;
            res[row + RAYROW*col].ray.lightness = .5;
            res[row + RAYROW*col].ray.reflections =0;
-           printf("u ");
         }
       }
-      else              printf("t ");
+      else {} //hit the triangle
       //else if it intersected, color should have been set in intersect
     }
   }
-  printf("\n ");
-
   //match pixels to resulting array, draw to screen rays which have at least one refelction
   //to show that rays are being generated and the pinhole is working
   

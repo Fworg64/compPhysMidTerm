@@ -47,7 +47,7 @@ present above the triangular surface (above meaning in the +Z direction of the w
 
 To perform this experiment, light rays are traced starting from their end point inside the camera, out through
 a pinhole, reflected a number of times off of the world, and back to either a light source or found to not 
-reach a light source.
+reach a light source. In this particular simulation, only two reflections maximum are used.
 
 For simplicity, real world units have been disregarded in an effort to keep the numbers used in the simulation from 
 becoming very large or small (which can affect the stability of the simulation).
@@ -78,21 +78,123 @@ of the virtual camera. What is not shown is how the rays reflect off of objects 
  (or not arrive) at light sources.
 
 \subsection{Implementation}
-If the axes which define the coordinates system with its origin at the pinhole of the camera and 
+If the axes which define the coordinates system with its origin at the pinhole of the camera and rotated 
+to point in a direction as a camera does are written as vectors described in world coordinates, then a 
+transform from camera coordinates to world coordinates can be constructed as follows.
 
-\subsection{Coordinate Transform}
-\begin{figure}[!t]
+
+The first step is to determine the translation matrix which would translate the coordinates of a point in world
+coordinates to a set of coordinates which would be defined by the camera if it had no rotation relative to the world's
+coordinate system. This matrix is denoted $T$ in Eqn.~\ref{eqn:trans}. 
+
+\begin{equation}
+T=
+  \begin{bmatrix}
+   1 & 0 & 0 & X_0 \\
+   0 & 1 & 0 & Y_0 \\
+   0 & 0 & 1 & Z_0 \\
+   0 & 0 & 0 & 1
+  \end{bmatrix}
+  \label{eqn:trans}
+\end{equation}
+
+
+The second step is to find the rotation matrix 
+which would transform the coordinates of a particle in world coordinates to that of the camera if it were located at 
+the origin but rotated. This matrix is denoted $R$ in Eqn.~\ref{eqn:rot}.
+
+\begin{equation}
+R=
+  \begin{bmatrix}
+   U_x & V_x & W_x & 0 \\
+   U_y & V_y & W_y & 0 \\
+   U_z & V_z & W_z & 0 \\
+   0 & 0 & 0 & 1
+  \end{bmatrix}
+  \label{eqn:rot}
+\end{equation}
+
+Finally, by combining these operations, the
+final transformation matrix (denoted $M$ in Eqn.~\ref{eqn:total}) is obtained as the product of the two prior transforms
+and points/particles described in world coordinates can be described in camera coordniates by applying Eqn.~\ref{eqn:doit}.
+
+\begin{equation}
+M = RT
+\label{eqn:total}
+\end{equation}
+
+\begin{equation}
+\begin{bmatrix}
+  x' \\
+  y' \\
+  z' \\
+  1
+\end{bmatrix}
+  = M
+\begin{bmatrix}
+  x \\
+  y \\
+  z \\
+  1
+\end{bmatrix}
+\label{eqn:doit}
+\end{equation}
+
+\begin{figure}[!b]
 \centering
 \includegraphics[width=3.5in]{./imgs/axes}
 \caption{World and camera axes together. Camera axes have been defined with reference to the world axes.}
 \label{fig:axes}
 \end{figure}
 
+Now that this transform is available, it is trivial to take points from a plane in camera coordinates and transform 
+them to points in world coordinates. These points form the origin's of the rays from the camera. To find the direction
+of each vector, some geometric manipulations are done. The following section of code demonstrates this.
 
-lots of coordinates and stuff
-%describe the camera coordinate systema and the transform between it and the world coordinate system. 
-%describe that the rays origin points are just the center of each pixel on the imageing plane
-%so the rays are just the rays which start at that point and point towards the pinhole
+\begin{lstlisting}[language=C]
+  for (int row=0; row<numRaysRows; row++)
+  {
+     for (int col=0; col<numRaysCols; col++)
+     {
+        //find point on imaging plane in camera coord
+        double filmy = row * raydistance - centery;
+        double filmx = col * raydistance - centerx;
+        double filmz = -cam.zoom;
+        //take (normal point - film point) and normalize to get unit direction 
+        // vector in camera coord
+        double magnitude = sqrt(filmy * filmy + filmx * filmx + cam.zoom*cam.zoom);
+        
+        double udvU = -filmy/magnitude;
+        double udvV = -filmx/magnitude;
+        double udvW = cam.zoom/magnitude;
+        //apply inverse tf to film point to get origin in world coord
+        gsl_matrix_set(originPoint, 0,0, filmx);
+        gsl_matrix_set(originPoint, 1,0, filmy);
+        gsl_matrix_set(originPoint, 2,0, filmz);
+        gsl_matrix_set(originPoint, 3,0, 1);
+
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, inverseTransform, 
+                       originPoint, 0, result);
+        
+        rays[row + numRaysRows * col].origin[0] = gsl_matrix_get(result, 0,0);
+        rays[row + numRaysRows * col].origin[1] = gsl_matrix_get(result, 1,0);
+        rays[row + numRaysRows * col].origin[2] = gsl_matrix_get(result, 2,0);
+        //apply inverse tf to unit direction vector to get udv in world coord
+        gsl_matrix_set(unitDirectionVector, 0,0, udvU);
+        gsl_matrix_set(unitDirectionVector, 1,0, udvV);
+        gsl_matrix_set(unitDirectionVector, 2,0, udvW);
+        gsl_matrix_set(unitDirectionVector, 3,0, 1);
+
+        gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, renderman.rot, 
+                       unitDirectionVector, 0, result);
+
+        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0);
+        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0);
+        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0);
+     }
+  }
+\end{lstlisting}
+
 \section{Plane Generation}
 \subsection{Description}
 The second step in the process of creating an accurate simulation is to create a way to model the triangular planes
@@ -254,7 +356,121 @@ dot product that was calculated earlier between the normal vector of the plane a
 This makes a vector that represents the new direction of the ray after reflection. We then find the magnitude of this reflected direction vector,
 and divide the reflected direction vector's elements by the magnitude, making it a unit vector. Finally, we set the orgin of the reflected ray to be
 the point at which the original ray intersects with the triangular plane, and we increment the number of reflections that the ray has made.
+
+\section{Shadow Generation}
+\subsection{Description}
+The rays sent into the world must be checked again for intersections after doing one reflection. If they bounce off of objects it is
+important to continue tracing them to find if they should be interpretted as yielding an object in the scene, the ground, the sky or 
+a shadow. This part of this simulation could be expanded to include truly reflective surfaces or dispersion and scattering of light
+or the effects of different material properties on light. However, for this project it has been restricted to finding if a certain
+area of the ground is shaded or not.
+\subsection{Implementation}
+In order to determine if a shadow is cast, a simple routine is used. First the rays from the camera are checked for intersection
+with the triangular sections in the world. If they intersect with the triangle, the ray is rendered as the color of the 
+triangle in the scene. If they do not intersect with the triangle, they are checked for intersection with the ground plane
+and the sky plane. If they arrive at the sky plane at this stage, they are rendered as the color of the sky. Finally, if the ray
+has missed the triangle, but reflects off of the ground and into the underside of the triangle, this area is considered a shadow area
+and is rendered the color of the ground but darker.
+\begin{lstlisting}
+  generateRaysFromCamera(cam, rays, RAYROW, RAYCOL);
+  collisionState colState;
+  for (int row =0; row<RAYROW; row++)
+  {
+    for (int col=0; col<RAYCOL; col++)
+    {
+      colState = intersect(&mySurf, &(rays[row + RAYROW*col]), &(res[row + RAYROW*col]));
+      if (colState == MISS) 
+      {
+        // printf("MISS\n");
+         for (int i=0; i<3;i++)
+         {
+           res[row + RAYROW*col].ray.origin[i] = rays[row + RAYROW*col].origin[i];
+           res[row + RAYROW*col].ray.direction[i] = rays[row + RAYROW*col].direction[i];
+         }
+        res[row + RAYROW*col].ray.reflections =0;
+
+        //bounce the ray off of the ground
+        intersectionResults tempRes;
+        colState = intersect(&ground, &(res[row + RAYROW*col].ray), &tempRes);
+        if (colState == INTERSECT) //missed the triangle, hit the ground
+        {
+           //memcpy(&(res[row + RAYROW*col]), &tempRes, sizeof(tempRes));
+           for (int i=0; i<3;i++)
+           {
+             res[row + RAYROW*col].ray.origin[i] = tempRes.ray.origin[i];
+             res[row + RAYROW*col].ray.direction[i] =  tempRes.ray.direction[i];
+           }
+           res[row + RAYROW*col].ray.reflections =1;
+           //check to see if it would hit the triangle after the ground
+           colState = intersect(&myAntiSurf, &(res[row + RAYROW*col].ray), &tempRes);
+           if (colState == INTERSECT) //this is a shadow
+           {
+             res[row + RAYROW*col].ray.hue = 120;
+             res[row + RAYROW*col].ray.sat = .2;
+             res[row + RAYROW*col].ray.lightness = .2;
+             res[row + RAYROW*col].ray.reflections =2;
+           }
+           else //this is just the ground
+           {
+             res[row + RAYROW*col].ray.hue = 120;
+             res[row + RAYROW*col].ray.sat = .5;
+             res[row + RAYROW*col].ray.lightness = .5;
+             res[row + RAYROW*col].ray.reflections =0;
+           }
+        }
+        else //must have hit the sky
+        {
+           res[row + RAYROW*col].ray.hue = 240;
+           res[row + RAYROW*col].ray.sat = .5;
+           res[row + RAYROW*col].ray.lightness = .5;
+           res[row + RAYROW*col].ray.reflections =0;
+        }
+      }
+      else {} //hit the triangle
+      //else if it intersected, color should have been set in intersect
+    }
+  }
+\end{lstlisting}
+
 \section{Results}
+Figures \ref{fig:output1}-\ref{fig:output4} were obtained and represent a floating trianglular section casting a shadow onto the 
+ground plane.
+\begin{multicols}{2}
+
+%figures of before during and after
+
+\begin{wrapfigure}{l}{.8\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./imgs/output1}
+\caption{}
+\label{fig:output1}
+\end{wrapfigure}
+
+\begin{wrapfigure}{l}{.8\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./imgs/output2}
+\caption{}
+\label{fig:output2}
+\end{wrapfigure}
+
+\begin{wrapfigure}{l}{.8\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./imgs/output3}
+\caption{}
+\label{fig:output3}
+\end{wrapfigure}
+
+\begin{wrapfigure}{l}{.8\linewidth}
+\centering
+\includegraphics[width=\linewidth]{./imgs/output4}
+\caption{}
+\label{fig:output4}
+\end{wrapfigure}
+
+\end{multicols}
+
+It can be seen that the sky acts as a uniform light plane and the triangles at different locations and sizes cast shadows
+onto the ground.
 
 \section{Personal Contribution}
 

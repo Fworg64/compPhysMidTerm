@@ -141,12 +141,9 @@ void generateRaysFromCamera(camera cam, tracingRay * rays, unsigned int numRaysR
         gsl_blas_dgemm(CblasNoTrans, CblasNoTrans, 1, renderman.rot, 
                        unitDirectionVector, 0, result);
 
-        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0);// - rays[row + numRaysRows * col].origin[0];
-        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0);// - rays[row + numRaysRows * col].origin[1];
-        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0);// - rays[row + numRaysRows * col].origin[2];
-        //rays[row + numRaysRows * col].direction[0] = udvU;
-        //rays[row + numRaysRows * col].direction[1] = udvV;
-        //rays[row + numRaysRows * col].direction[2] = udvW;
+        rays[row + numRaysRows * col].direction[0] = gsl_matrix_get(result, 0,0);
+        rays[row + numRaysRows * col].direction[1] = gsl_matrix_get(result, 1,0);
+        rays[row + numRaysRows * col].direction[2] = gsl_matrix_get(result, 2,0);
      }
   }
   
