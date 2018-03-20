@@ -93,7 +93,7 @@ collisionState intersect(triangleSurface *surf, tracingRay *ray, intersectionRes
     return ABSORBED;
   }
   else { //perfect reflection
-      double DP,MagN,MagD;
+      double DP=0,MagN=0,MagD=0;
     DP = dotProduct(ray->direction,N);
     for (int i=0;i<3;i++){
       MagN+=N[i]*N[i];
